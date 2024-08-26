@@ -2,7 +2,7 @@ Toyota Case Project
 
 Database: MsSQL Server
 
-Backend: .NET 6 ve üstü
+Backend: .NET 8
 
 Authentication: Custom bir identity oluşturulmuştur. Proje Login ekranı ile açılır ve login olunmadan hiçbir sayfaya
 erişim sağlanamaz. Proje her restart olduğunda tekrar login olunacak şekilde tasarlanmıştır.
