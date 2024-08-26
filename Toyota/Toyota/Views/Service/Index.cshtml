@@ -1,0 +1,231 @@
+﻿@using EntityLayer.Concrete
+@model List<Service>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<style>
+    body {
+        background-color: #1e1e1e; /* Koyu arka plan rengi */
+        color: #fff; /* Beyaz metin rengi */
+    }
+
+    .btn-primary {
+        background-color: #0082fc; /* Toyota hibrit mavi */
+        border-color: #0082fc;
+    }
+
+        .btn-primary:hover {
+            background-color: #006bb3;
+            border-color: #006bb3;
+        }
+
+    .card-body {
+        background-color: #2c2c2c;
+        border-radius: 10px;
+    }
+
+    .table {
+        color: #fff;
+    }
+
+    .modal-content {
+        background-color: #2c2c2c;
+        color: #fff;
+    }
+
+    .modal-header .close {
+        color: #fff;
+    }
+</style>
+
+<h1 class="text-center mb-4">Toyota Servis Kayıtları</h1>
+<button type="button" class="btn btn-primary float-end mb-3" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+    Ekle
+</button>
+<table class="table table-bordered table-dark">
+    <thead>
+        <tr>
+            <th>Araç Plakası</th>
+            <th>Marka Adı</th>
+            <th>Model Adı</th>
+            <th>KM Bilgisi</th>
+            <th>Model Yılı</th>
+            <th>Servise Geliş Tarihi</th>
+            <th>Garanti Var Mı?</th>
+            <th>Şehir</th>
+            <th>Servis Notu</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.LicencePlate</td>
+                <td>@item.Brand</td>
+                <td>@item.Model</td>
+                <td>@item.Km</td>
+                <td>@item.ModelYear</td>
+                <td>@item.ArrivalDate.ToString("dd-MM-yyyy")</td>
+                <td>@(item.isGuarantee ? "Evet" : "Hayır")</td>
+                <td>@item.City</td>
+                <td>@item.Note</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-bs-id="@item.Id">
+                        Sil
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Ekleme Modali -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addServiceModalLabel">Servis Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Service/Add">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label>Araç Plakası</label>
+                                <input type="text" class="form-control" name="LicencePlate" required />
+                            </div>
+                            <div class="col">
+                                <label>Marka Adı</label>
+                                <input type="text" class="form-control" name="Brand" required />
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label>Model Adı</label>
+                                <input type="text" class="form-control" name="Model" required />
+                            </div>
+                            <div class="col">
+                                <label>KM Bilgisi</label>
+                                <input type="number" class="form-control" name="Km" required />
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label>Model Yılı</label>
+                                <input type="number" class="form-control" name="ModelYear" />
+                            </div>
+                            <div class="col">
+                                <label>Servise Geliş Tarihi</label>
+                                <input type="date" class="form-control" name="ArrivalDate" required />
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label>Garanti Var Mı?</label>
+                                <select class="form-control" name="isGuarantee">
+                                    <option value="">Seçiniz...</option>
+                                    <option value="true">Evet</option>
+                                    <option value="false">Hayır</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label>Şehir</label>
+                                <select class="form-control" id="cityDropdown" name="City">
+                                    <option value="">Şehir Seçin</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label class="mt-2">Servis Notu</label>
+                        <textarea class="form-control" name="Note"></textarea>
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Silme Onayı Modali -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Onay</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Silmek istediğinize emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <!-- Silme işlemi için form -->
+                <form method="post" action="/Service/Delete" id="deleteForm">
+                    <input type="hidden" name="id" id="deleteId" />
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Eğer TempData'da bir başarı mesajı varsa toastr ile göster
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <text>
+                toastr.success('@TempData["SuccessMessage"]', 'Başarılı', {
+                    "positionClass": "toast-top-right", // Mesajın sağ üstte görünmesi için
+                    "closeButton": true, // Kapatma butonu
+                    "progressBar": true // İlerleme çubuğu
+                });
+        </text>
+    }
+    else if (TempData["FailedMessage"] != null)
+    {
+        <text>
+                toastr.success('@TempData["FailedMessage"]', 'Başarısız', {
+                    "positionClass": "toast-top-right", // Mesajın sağ üstte görünmesi için
+                    "closeButton": true, // Kapatma butonu
+                    "progressBar": true // İlerleme çubuğu
+                });
+        </text>
+    }
+
+            // Şehir dropdown için AJAX çağrısı
+            $.ajax({
+                url: "https://countriesnow.space/api/v0.1/countries/cities",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ country: "Turkey" }),
+                success: function (response) {
+                    if (response && response.data) {
+                        var cityDropdown = $("#cityDropdown");
+                        cityDropdown.empty(); // Önce dropdown'u temizle
+                        cityDropdown.append('<option value="">Şehir Seçin</option>');
+                        $.each(response.data, function (index, city) {
+                            cityDropdown.append('<option value="' + city + '">' + city + '</option>');
+                        });
+                    }
+                },
+                error: function () {
+                    alert("Şehirler yüklenirken bir hata oluştu.");
+                }
+            });
+
+        // Confirm Delete Modal'da Sil butonuna tıklanma işlemi
+        $("#confirmDeleteModal").on("show.bs.modal", function (event) {
+            var button = $(event.relatedTarget); // Modal'ı açan buton
+            var serviceId = button.data("bs-id"); // Data attribute'ten ID'yi al
+            $("#deleteId").val(serviceId); // Formdaki hidden input'a ID'yi ata
+        });
+    });
+</script>

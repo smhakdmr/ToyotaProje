@@ -1,0 +1,9 @@
+INSERT INTO [dbo].[Users]
+           ([FullName]
+           ,[Email]
+           ,[Password]
+           ,[CreatedDate]
+           ,[isActive])
+     VALUES
+           ('Admin Admin', 'admin@admin.com','Admin123.',GETDATE(), 1)
+GO
