@@ -9,12 +9,12 @@
 
 <style>
     body {
-        background-color: #1e1e1e; /* Koyu arka plan rengi */
-        color: #fff; /* Beyaz metin rengi */
+        background-color: #1e1e1e;
+        color: #fff;
     }
 
     .btn-primary {
-        background-color: #0082fc; /* Toyota hibrit mavi */
+        background-color: #0082fc; 
         border-color: #0082fc;
     }
 
@@ -183,9 +183,9 @@
     {
         <text>
                 toastr.success('@TempData["SuccessMessage"]', 'Başarılı', {
-                    "positionClass": "toast-top-right", // Mesajın sağ üstte görünmesi için
-                    "closeButton": true, // Kapatma butonu
-                    "progressBar": true // İlerleme çubuğu
+                    "positionClass": "toast-top-right", 
+                    "closeButton": true, 
+                    "progressBar": true 
                 });
         </text>
     }
@@ -193,9 +193,9 @@
     {
         <text>
                 toastr.success('@TempData["FailedMessage"]', 'Başarısız', {
-                    "positionClass": "toast-top-right", // Mesajın sağ üstte görünmesi için
-                    "closeButton": true, // Kapatma butonu
-                    "progressBar": true // İlerleme çubuğu
+                    "positionClass": "toast-top-right", 
+                    "closeButton": true, 
+                    "progressBar": true 
                 });
         </text>
     }
@@ -209,7 +209,7 @@
                 success: function (response) {
                     if (response && response.data) {
                         var cityDropdown = $("#cityDropdown");
-                        cityDropdown.empty(); // Önce dropdown'u temizle
+                        cityDropdown.empty(); 
                         cityDropdown.append('<option value="">Şehir Seçin</option>');
                         $.each(response.data, function (index, city) {
                             cityDropdown.append('<option value="' + city + '">' + city + '</option>');
@@ -223,9 +223,9 @@
 
         // Confirm Delete Modal'da Sil butonuna tıklanma işlemi
         $("#confirmDeleteModal").on("show.bs.modal", function (event) {
-            var button = $(event.relatedTarget); // Modal'ı açan buton
-            var serviceId = button.data("bs-id"); // Data attribute'ten ID'yi al
-            $("#deleteId").val(serviceId); // Formdaki hidden input'a ID'yi ata
+            var button = $(event.relatedTarget); 
+            var serviceId = button.data("bs-id"); 
+            $("#deleteId").val(serviceId); 
         });
     });
 </script>
